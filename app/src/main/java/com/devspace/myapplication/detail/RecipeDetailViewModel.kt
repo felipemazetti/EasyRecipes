@@ -12,22 +12,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class RecipeDetailViewModel (
+
+class RecipeDetailViewModel(
     private val detailService: DetailService
-): ViewModel()  {
+) : ViewModel() {
 
     private val _uiRecipeDetail = MutableStateFlow<RecipeDto?>(null)
     val uiRecipeDetail: StateFlow<RecipeDto?> = _uiRecipeDetail
 
 
-    fun fetchRecipeDetail(id: String){
+    fun fetchRecipeDetail(id: String) {
         if (_uiRecipeDetail.value == null) {
-            viewModelScope.launch (Dispatchers.IO) {
+            viewModelScope.launch(Dispatchers.IO) {
                 val response = detailService.getRecipeInformation(id)
                 if (response.isSuccessful) {
                     Log.d("API Response", "Receita: ${response.body()}")
@@ -42,9 +39,8 @@ class RecipeDetailViewModel (
     }
 
 
-
-    companion object{
-        val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory{
+    companion object {
+        val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
 
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {

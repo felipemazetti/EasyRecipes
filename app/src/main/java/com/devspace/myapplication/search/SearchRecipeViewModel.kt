@@ -14,17 +14,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
-class SearchRecipeViewModel (
+class SearchRecipeViewModel(
     private val searchService: SearchService
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiSearchRecipes = MutableStateFlow<List<SearchRecipeDto>>(emptyList())
     val uiSearchRecipes: StateFlow<List<SearchRecipeDto>> = _uiSearchRecipes
 
 
-    fun fetchSearchRecipes(query: String){
+    fun fetchSearchRecipes(query: String) {
         if (_uiSearchRecipes.value.isEmpty()) {
-            viewModelScope.launch (Dispatchers.IO) {
+            viewModelScope.launch(Dispatchers.IO) {
                 val response = searchService.searchRecipes(query)
                 if (response.isSuccessful) {
                     _uiSearchRecipes.value = response.body()?.results ?: emptyList()
@@ -36,9 +36,8 @@ class SearchRecipeViewModel (
     }
 
 
-
     companion object {
-        val factory : ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+        val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
 
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {

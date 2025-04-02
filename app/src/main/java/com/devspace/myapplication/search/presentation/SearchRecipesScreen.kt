@@ -1,6 +1,5 @@
 package com.devspace.myapplication.search.presentation
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,9 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,26 +30,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.devspace.myapplication.SearchRecipeDto
-import com.devspace.myapplication.SearchRecipesResponse
-import com.devspace.myapplication.common.data.RetrofitClient
 import com.devspace.myapplication.search.SearchRecipeViewModel
-import com.devspace.myapplication.search.data.SearchService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.jvm.java
+
 
 @Composable
-fun SearchRecipesScreen(query: String,
-                        navHostController: NavHostController,
-                        searchViewModel: SearchRecipeViewModel
+fun SearchRecipesScreen(
+    query: String,
+    navHostController: NavHostController,
+    searchViewModel: SearchRecipeViewModel
 ) {
 
     val searchRecipes by searchViewModel.uiSearchRecipes.collectAsState()
     searchViewModel.fetchSearchRecipes(query)
-
-
-
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -94,15 +82,15 @@ fun SearchRecipesScreen(query: String,
 fun SearchRecipeContent(
     recipes: List<SearchRecipeDto>,
     onClick: (SearchRecipeDto) -> Unit
-){
-    SearchRecipeList(recipes,onClick)
+) {
+    SearchRecipeList(recipes, onClick)
 }
 
 @Composable
 fun SearchRecipeList(
     recipes: List<SearchRecipeDto>,
     onClick: (SearchRecipeDto) -> Unit
-){
+) {
     LazyColumn(
         modifier = Modifier.padding(16.dp)
     ) {
@@ -120,19 +108,23 @@ fun SearchRecipeList(
 fun SearchRecipeItem(
     searchRecipeDto: SearchRecipeDto,
     onClick: (SearchRecipeDto) -> Unit
-){
-    Column(modifier = Modifier
-        .padding(8.dp)
-        .fillMaxSize().clickable {
-            onClick.invoke(searchRecipeDto)
-        }
+) {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxSize()
+            .clickable {
+                onClick.invoke(searchRecipeDto)
+            }
     ) {
         AsyncImage(
             contentScale = ContentScale.Crop,
-            modifier = Modifier.clip(RoundedCornerShape(topEnd = 8.dp, topStart = 8.dp))
+            modifier = Modifier
+                .clip(RoundedCornerShape(topEnd = 8.dp, topStart = 8.dp))
                 .fillMaxWidth()
                 .height(150.dp),
-            model = searchRecipeDto.image, contentDescription = "${searchRecipeDto.title} Recipe Image"
+            model = searchRecipeDto.image,
+            contentDescription = "${searchRecipeDto.title} Recipe Image"
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(
