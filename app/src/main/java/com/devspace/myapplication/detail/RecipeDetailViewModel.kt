@@ -15,28 +15,31 @@ import kotlinx.coroutines.launch
 
 
 class RecipeDetailViewModel(
-    private val detailService: DetailService
+    private val detailService: DetailService,
 ) : ViewModel() {
 
     private val _uiRecipeDetail = MutableStateFlow<RecipeDto?>(null)
     val uiRecipeDetail: StateFlow<RecipeDto?> = _uiRecipeDetail
 
 
-    fun fetchRecipeDetail(id: String) {
-        if (_uiRecipeDetail.value == null) {
-            viewModelScope.launch(Dispatchers.IO) {
-                val response = detailService.getRecipeInformation(id)
-                if (response.isSuccessful) {
-                    Log.d("API Response", "Receita: ${response.body()}")
-                    _uiRecipeDetail.value = response.body()
 
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Erro desconhecido"
-                    Log.e("RecipeDetailViewModel", "Error: $errorMessage")
-                }
+    fun fetchRecipeDetail(id: String) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = detailService.getRecipeInformation(id)
+            if (response.isSuccessful) {
+                Log.d("API Response", "Receita: ${response.body()}")
+                _uiRecipeDetail.value = response.body()
+
+            } else {
+                val errorMessage = response.errorBody()?.string() ?: "Erro desconhecido"
+                Log.e("RecipeDetailViewModel", "Error: $errorMessage")
             }
         }
+
     }
+
+
 
 
     companion object {
@@ -46,7 +49,7 @@ class RecipeDetailViewModel(
             override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
                 val detailService = RetrofitClient.retrofit.create(DetailService::class.java)
                 return RecipeDetailViewModel(
-                    detailService
+                    detailService,
                 ) as T
             }
 

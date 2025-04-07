@@ -1,17 +1,24 @@
 package com.devspace.myapplication.detail.presentation
 
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,6 +30,7 @@ import coil.compose.AsyncImage
 import com.devspace.myapplication.common.model.RecipeDto
 import com.devspace.myapplication.designsystem.ERHtmlText
 import com.devspace.myapplication.detail.RecipeDetailViewModel
+import java.net.URLEncoder
 
 
 @Composable
@@ -33,8 +41,9 @@ fun RecipeDetailScreen(id : String,
 
 
     val recipeDto by detailViewModel.uiRecipeDetail.collectAsState()
-    detailViewModel.fetchRecipeDetail(id)
-
+    LaunchedEffect(id) {
+        detailViewModel.fetchRecipeDetail(id)
+    }
 
 
 
@@ -50,7 +59,7 @@ fun RecipeDetailScreen(id : String,
                     navHostController.popBackStack()
                 }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back Button"
                     )
                 }
@@ -61,6 +70,15 @@ fun RecipeDetailScreen(id : String,
             }
 
             RecipeDetailContent(it)
+
+            Spacer(modifier = Modifier.padding(32.dp))
+
+            IngredientsButton(
+                onClick = {
+                    navHostController.navigate(route = "ingredient_screen/${it.id.toString()}/${URLEncoder.encode(it.title, "UTF-8")}")
+                }
+            )
+
         }
 
     }
@@ -72,7 +90,7 @@ fun RecipeDetailScreen(id : String,
     @Composable
     fun RecipeDetailContent(recipe: RecipeDto) {
         Column (
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxWidth()
         ){
             AsyncImage(
                 modifier = Modifier
@@ -83,11 +101,43 @@ fun RecipeDetailScreen(id : String,
                 contentDescription = "${recipe.title} Image"
             )
 
+            Spacer(modifier = Modifier.padding(8.dp))
+
             ERHtmlText(
-                text = recipe.summary)
+                text = recipe.summary
+            )
+
         }
-        
+
     }
+
+@Composable
+fun IngredientsButton(
+    onClick: () -> Unit
+){
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            modifier = Modifier
+                .padding(top = 8.dp, bottom = 32.dp),
+            shape = RoundedCornerShape(8.dp),
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        ) {
+            Text(
+                color = MaterialTheme.colorScheme.onPrimary,
+                text = "Ingredients"
+            )
+        }
+    }
+
+}
+
 
 
 

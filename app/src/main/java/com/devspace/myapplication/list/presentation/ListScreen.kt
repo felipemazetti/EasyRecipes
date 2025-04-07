@@ -1,5 +1,6 @@
 package com.devspace.myapplication.list.presentation
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,12 +41,6 @@ fun MainScreen(
     val randomRecipes by listViewModel.recipes.collectAsState()
 
 
-    RecipeList(
-        modifier = Modifier.fillMaxSize(),
-        randomRecipes, onClick = { itemClicked ->
-            navHostController.navigate("recipe_detail_screen/${itemClicked.id}")
-        }
-    )
     Surface (
         modifier = Modifier.fillMaxSize()
     ){
@@ -60,6 +55,7 @@ fun MainScreen(
             onClick =
                 { itemClicked ->
                     navHostController.navigate(route = "recipe_detail_screen/${itemClicked.id}")
+                    Log.d("MainScreen", "ID da receita clicada: ${itemClicked.id}")
                 }
         )
     }
@@ -76,9 +72,9 @@ fun MainContent(
         modifier = modifier
             .fillMaxSize()
     ) {
-        var query by rememberSaveable { mutableStateOf("") }
+        var query by remember { mutableStateOf("") }
         SearchSession(
-            label = "Find best recipes \nfor cooking!",
+            label = "Find best recipes \nfor cooking",
             query = query,
             onValueChange = { newValue ->
                 query = newValue
@@ -87,7 +83,7 @@ fun MainContent(
 
         )
         RecipeSession(
-            label = "Random Recipes",
+            label = "Recipes",
             recipes = recipes,
             onClick = onClick
         )
@@ -150,7 +146,6 @@ fun RecipeList(
         modifier = modifier.padding(16.dp)
     ) {
         items(recipes) {
-
             RecipeItem(
                 recipeDto = it,
                 onClick = onClick
@@ -200,5 +195,3 @@ fun RecipeItem(
     }
 
 }
-
-
