@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://api.spoonacular.com/"
 object RetrofitClient {
@@ -12,6 +13,8 @@ object RetrofitClient {
     private val httpClient: OkHttpClient
         get() {
             val clientBuilder = OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
             val token = BuildConfig.API_KEY
 
             clientBuilder.addInterceptor { chain ->

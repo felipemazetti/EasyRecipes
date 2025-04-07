@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.devspace.myapplication.detail.RecipeDetailViewModel
+import com.devspace.myapplication.ingredients.IngredientsViewModel
 import com.devspace.myapplication.list.RecipeListViewModel
 import com.devspace.myapplication.search.SearchRecipeViewModel
 import com.devspace.myapplication.ui.theme.EasyRecipesTheme
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     private val listViewModel by viewModels<RecipeListViewModel> {RecipeListViewModel.factory}
     private val detailViewModel by viewModels< RecipeDetailViewModel> {RecipeDetailViewModel.factory}
     private val searchViewModel by viewModels<SearchRecipeViewModel> {SearchRecipeViewModel.factory}
+    private val ingredientsViewModel by viewModels<IngredientsViewModel> {IngredientsViewModel.factory}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +32,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation(listViewModel = listViewModel,
+                    AppNavigation(
+                        listViewModel = listViewModel,
                         detailViewModel = detailViewModel,
-                        searchViewModel = searchViewModel)
+                        searchViewModel = searchViewModel,
+                        ingredientsViewModel = ingredientsViewModel
+                    )
 
                 }
             }

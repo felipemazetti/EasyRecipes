@@ -23,16 +23,15 @@ class SearchRecipeViewModel(
 
 
     fun fetchSearchRecipes(query: String) {
-        if (_uiSearchRecipes.value.isEmpty()) {
-            viewModelScope.launch(Dispatchers.IO) {
-                val response = searchService.searchRecipes(query)
-                if (response.isSuccessful) {
-                    _uiSearchRecipes.value = response.body()?.results ?: emptyList()
-                } else {
-                    Log.e("SearchRecipesScreen", "Error: ${response.errorBody()}")
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = searchService.searchRecipes(query)
+            if (response.isSuccessful) {
+                _uiSearchRecipes.value = response.body()?.results ?: emptyList()
+            } else {
+                Log.e("SearchRecipesScreen", "Error: ${response.errorBody()}")
             }
         }
+
     }
 
 

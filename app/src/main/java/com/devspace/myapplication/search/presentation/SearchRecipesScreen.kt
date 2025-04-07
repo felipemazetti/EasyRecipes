@@ -1,5 +1,6 @@
 package com.devspace.myapplication.search.presentation
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -57,7 +58,7 @@ fun SearchRecipesScreen(
                 }
             ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back Button"
                 )
             }
@@ -70,6 +71,7 @@ fun SearchRecipesScreen(
             recipes = searchRecipes,
             onClick = { itemClicked ->
                 navHostController.navigate(route = "recipe_detail_screen/${itemClicked.id}")
+                Log.d("TAG", "SearchRecipesScreen: ${itemClicked.id}")
             }
         )
 

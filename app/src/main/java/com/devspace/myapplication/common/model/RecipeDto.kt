@@ -5,4 +5,5 @@ data class RecipeDto(
     val title: String,
     val image: String,
     val summary: String,
+
 )
